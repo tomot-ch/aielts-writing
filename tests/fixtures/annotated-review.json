@@ -1,0 +1,171 @@
+{
+  "runs": [
+    {
+      "text": "Overall,two roundabouts were added, the bus stops along the Hospital Rd has replaced by a independent bus station,and the car park was separated for staff and public.\n\n",
+      "color": "black"
+    },
+    {
+      "text": "In 2007,Ring Road surrounded the whole city hospital and connected to Hospital Rd in the south.There were six bus stops along the Hospital Rd and both sides of Hospital Rd has three bus stops.\n\n",
+      "color": "blue"
+    },
+    {
+      "text": "There was also a single car park at the east of Hospital Rd,and at the south side of the road lied a City Road from west to the east.\n\n",
+      "color": "black"
+    },
+    {
+      "text": "By 2010,the roundabouts had been added at both ends of Hospital Rd. The public car park was built near Ring Road.\n\n",
+      "color": "green"
+    },
+    {
+      "text": "Same sentence. Same sentence.\n",
+      "color": "black"
+    }
+  ],
+  "response": {
+    "schemaVersion": 1,
+    "summary": "合成验收：重点检查局部语法、空格和比较结构。没有原题，仅给语言教学预估。",
+    "scores": [
+      {
+        "criterion": "GRA",
+        "band": "6.0",
+        "explanation": "存在主谓一致与冠词错误。"
+      },
+      {
+        "criterion": "LR",
+        "band": "6.5",
+        "explanation": "词汇足够描述变化，少数搭配需调整。"
+      },
+      {
+        "criterion": "CC",
+        "band": "6.0",
+        "explanation": "分组与句间连接可以更清楚。"
+      },
+      {
+        "criterion": "overall",
+        "band": "7.0",
+        "explanation": "此项应被程序屏蔽：没有原题。"
+      }
+    ],
+    "annotations": [
+      {
+        "segmentIds": [
+          "s0001"
+        ],
+        "scope": "text",
+        "original": "Overall,two roundabouts were added, the bus stops along the Hospital Rd has replaced by a independent bus station,and the car park was separated for staff and public.",
+        "suggestion": "Overall, two roundabouts were added, the bus stops along Hospital Rd were replaced by an independent bus station, and the car park was divided into staff and public sections.",
+        "issueType": "语法",
+        "kind": "error",
+        "explanation": "检查原文依据，保持主谓一致并补齐必要空格。",
+        "occurrence": null
+      },
+      {
+        "segmentIds": [
+          "s0003"
+        ],
+        "scope": "text",
+        "original": "In 2007,Ring Road surrounded the whole city hospital and connected to Hospital Rd in the south.",
+        "suggestion": "In 2007, Ring Road surrounded the city hospital and connected to Hospital Rd in the south.",
+        "issueType": "语法",
+        "kind": "error",
+        "explanation": "检查原文依据，保持主谓一致并补齐必要空格。",
+        "occurrence": null
+      },
+      {
+        "segmentIds": [
+          "s0003"
+        ],
+        "scope": "text",
+        "original": "There were six bus stops along the Hospital Rd and both sides of Hospital Rd has three bus stops.",
+        "suggestion": "There were six bus stops along Hospital Rd, with three bus stops on each side.",
+        "issueType": "语法",
+        "kind": "error",
+        "explanation": "检查原文依据，保持主谓一致并补齐必要空格。",
+        "occurrence": null
+      },
+      {
+        "segmentIds": [
+          "s0003"
+        ],
+        "scope": "text",
+        "original": "both sides of Hospital Rd has three bus stops",
+        "suggestion": "there were three bus stops on each side of Hospital Rd",
+        "issueType": "表达精简",
+        "kind": "improvement",
+        "explanation": "检查原文依据，保持主谓一致并补齐必要空格。",
+        "occurrence": null
+      },
+      {
+        "segmentIds": [
+          "s0005"
+        ],
+        "scope": "text",
+        "original": "There was also a single car park at the east of Hospital Rd,and at the south side of the road lied a City Road from west to the east.",
+        "suggestion": "There was also a single car park to the east of Hospital Rd, and a City Road ran from west to east to the south.",
+        "issueType": "语法",
+        "kind": "error",
+        "explanation": "检查原文依据，保持主谓一致并补齐必要空格。",
+        "occurrence": null
+      },
+      {
+        "segmentIds": [
+          "s0009"
+        ],
+        "scope": "text",
+        "original": "Same sentence.",
+        "suggestion": "The same sentence.",
+        "issueType": "语法",
+        "kind": "error",
+        "explanation": "重复句未指明次数，程序应保留建议而不猜测位置。",
+        "occurrence": null
+      },
+      {
+        "segmentIds": [
+          "s0009"
+        ],
+        "scope": "text",
+        "original": "Same sentence.",
+        "suggestion": "A repeated sentence.",
+        "issueType": "语法",
+        "kind": "error",
+        "explanation": "检查原文依据，保持主谓一致并补齐必要空格。",
+        "occurrence": 2
+      },
+      {
+        "segmentIds": [
+          "s0999"
+        ],
+        "scope": "text",
+        "original": "Missing evidence.",
+        "suggestion": "Correct evidence.",
+        "issueType": "语法",
+        "kind": "error",
+        "explanation": "检查原文依据，保持主谓一致并补齐必要空格。",
+        "occurrence": null
+      },
+      {
+        "segmentIds": [
+          "s0007"
+        ],
+        "scope": "paragraph",
+        "original": "",
+        "suggestion": null,
+        "issueType": "衔接",
+        "kind": "improvement",
+        "explanation": "比较应按变化前后分组，避免逐项罗列。",
+        "occurrence": null
+      },
+      {
+        "segmentIds": [],
+        "scope": "essay",
+        "original": "",
+        "suggestion": null,
+        "issueType": "待核实",
+        "kind": "verify",
+        "explanation": "合成材料没有原题，不能判断图示准确性或综合分。",
+        "occurrence": null
+      }
+    ],
+    "issueSummary": "主谓一致：先找到句子主语。\n标点和空格：检查逗号与句号后空格。\n下次自查：把变化前后与相同类别放在一起比较。"
+  }
+}

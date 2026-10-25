@@ -1,0 +1,26 @@
+.workflow-write .chat-pane,.workflow-write .chat-splitter,
+.workflow-review .question-pane,.workflow-review .essay-pane,.workflow-review .splitter,
+.workflow-revise .chat-collapsed,.workflow-revise .chat-splitter:has(+.chat-collapsed){display:none}
+.workflow-review .chat-pane{display:flex;flex:1;width:100%!important;min-width:0!important}
+.workflow-review .chat-pane>.pane-head{display:none}
+.workflow-write .panes .question-pane{max-width:none}
+.review-page,.review-snapshot{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+.review-page[hidden],.review-snapshot[hidden]{display:none}
+.review-job{padding:24px;overflow:auto;flex:none}
+.review-job .job-box{max-width:620px;margin:auto}
+.review-previous{padding:16px;align-self:center}
+.chat-review-context{border:1px solid var(--border);background:var(--soft);border-radius:10px;padding:14px;margin-bottom:22px;font-size:12px;line-height:1.8}
+.chat-review-context strong{font-weight:600}
+.chat-review-context p{color:var(--muted);margin:6px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.workflow-controls>button{min-width:88px;height:38px}
+.writer-footer .workflow-secondary{gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.workflow-review .writer-head,.workflow-revise .writer-head,.workflow-write .writer-head{height:auto;min-height:70px;flex-wrap:wrap;gap:10px}
+.workflow-review .writer-title input,.workflow-revise .writer-title input,.workflow-write .writer-title input{min-width:0;max-width:100%;width:380px}
+.writer-actions{flex-wrap:wrap}
+.exam-mode .chat-splitter{display:none}
+@media(max-width:1120px){
+ .writer-footer{height:auto;min-height:70px;gap:12px;padding:12px 18px;flex-wrap:wrap}
+ .workflow-controls>button{min-width:76px}
+ .workflow-revise .panes .essay-pane{min-width:180px}
+ .workflow-secondary .secondary{height:32px;font-size:11px;padding:0 10px}
+}

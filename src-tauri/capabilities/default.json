@@ -1,0 +1,1 @@
+{"identifier":"default","description":"Writing desktop commands and file picker","windows":["main"],"permissions":["core:default","core:window:allow-set-fullscreen","dialog:default","opener:default"]}

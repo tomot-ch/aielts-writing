@@ -1,0 +1,12 @@
+[
+  {"text": "", "count": 0},
+  {"text": "Hello, world!", "count": 2},
+  {"text": "don't it's rock’n’roll", "count": 3},
+  {"text": "'quoted' ‘words’", "count": 2},
+  {"text": "' ’ ... —", "count": 0},
+  {"text": "well-known 20-year-old", "count": 5},
+  {"text": "100 3.14", "count": 3},
+  {"text": "英语 IELTS 写作", "count": 5},
+  {"text": "two\n\nparagraphs\tand spaces", "count": 4},
+  {"text": "rock''roll", "count": 2}
+]

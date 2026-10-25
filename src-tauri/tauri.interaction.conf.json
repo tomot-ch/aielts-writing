@@ -1,0 +1,15 @@
+{
+  "productName": "爱雅思写作 aiELTS Writing-交互验收",
+  "identifier": "com.local.ieltswriting.interactionacceptance",
+  "app": {
+    "windows": [
+      {
+        "title": "爱雅思写作 aiELTS Writing 交互验收",
+        "width": 1440,
+        "height": 900,
+        "minWidth": 900,
+        "minHeight": 620
+      }
+    ]
+  }
+}

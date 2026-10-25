@@ -1,0 +1,7 @@
+{
+  "productName": "爱雅思写作 aiELTS Writing-批注预览",
+  "identifier": "com.local.ieltswriting.annotationspreview",
+  "app": {
+    "windows": [{"title": "爱雅思写作 aiELTS Writing · 批注预览", "width": 1440, "height": 900, "minWidth": 900, "minHeight": 620}]
+  }
+}

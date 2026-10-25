@@ -1,0 +1,81 @@
+/* The parent workflow controls which page is visible, keeping editor state mounted. */
+.chat-review-tabs{display:flex;gap:4px;background:var(--soft);padding:3px;border-radius:8px}
+.chat-review-tabs button{border:0;background:transparent;color:var(--muted);border-radius:6px;padding:6px 14px;font-size:12px}
+.chat-review-tabs button[aria-selected=true]{background:var(--panel);color:var(--text);box-shadow:0 1px 3px #0001}
+.annotated-review{--review-delete:#c43737;--review-insert:#168153;--review-highlight:#faedb5;--review-selected:#c4a145;display:grid;grid-template-columns:minmax(0,0.95fr) minmax(0,1.15fr);flex:1;min-height:0;min-width:0;overflow:hidden}
+.review-source-pane,.review-results-pane{display:flex;flex-direction:column;min-height:0;min-width:0}
+.review-source-pane{border-right:1px solid var(--border)}
+.review-results-pane{background:var(--soft)}
+.review-pane-heading{min-height:57px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 20px;border-bottom:1px solid var(--border);flex:none}
+.review-pane-heading>div{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.review-pane-heading strong{font-size:13px}
+.review-pane-heading small,.review-source-meta,.review-source-footer{font-size:11px;color:var(--muted)}
+.review-legend{display:flex;gap:10px;white-space:nowrap;font-size:11px}
+.annotated-review del{color:var(--review-delete);text-decoration-thickness:1.5px}
+.annotated-review ins{color:var(--review-insert);text-decoration:none}
+.review-source-meta{display:flex;justify-content:space-between;gap:10px;padding:14px 20px 8px}
+.review-source-scroll{overflow:auto;overscroll-behavior:contain;flex:1;min-height:0;padding:10px 24px 24px;scrollbar-gutter:stable}
+.review-source-text{white-space:pre-wrap;overflow-wrap:anywhere;font-size:16px;line-height:2.05}
+.has-annotation{cursor:pointer;text-decoration:underline dotted color-mix(in srgb,var(--muted) 45%,transparent);text-underline-offset:5px;border-radius:2px}
+.has-annotation:hover{background:var(--yellow-soft)}
+.selected-source{background:var(--review-highlight);box-shadow:0 2px 0 var(--review-highlight);text-decoration:none;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.review-source-text .source-deletion{color:var(--review-delete);text-decoration:line-through;text-decoration-thickness:1.5px}
+.has-annotation:focus-visible,.review-card-heading:focus-visible,.chat-review-tabs button:focus-visible{outline:2px solid var(--review-selected,#b29336);outline-offset:3px}
+.review-source-footer{padding:11px 20px;border-top:1px solid var(--border);flex:none}
+.review-results-scroll{overflow:auto;overscroll-behavior:contain;min-height:0;flex:1;padding:18px 20px 28px;scrollbar-gutter:stable}
+.review-summary{font-size:13px;line-height:1.75;margin:0 0 18px;white-space:pre-wrap;overflow-wrap:anywhere}
+.review-scores,.review-issue-summary{margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.review-scores summary,.review-issue-summary summary{cursor:pointer;font-weight:650;font-size:13px}
+.review-scores summary>span{font-weight:400;color:var(--muted);font-size:11px;margin-left:10px}
+.review-scores>div{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;margin-top:18px}
+.review-scores>div>div{min-width:0}
+.review-scores strong{font-size:19px;display:inline-block;margin-right:9px;font-weight:650}
+.review-scores span{font-size:12px}
+.review-scores p{font-size:11px;color:var(--muted);line-height:1.65;margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.review-card-list{display:flex;flex-direction:column;gap:12px}
+.review-card{border:1px solid var(--border);border-radius:12px;background:var(--panel);min-width:0;scroll-margin-top:20px}
+.review-card.is-selected{border-color:var(--review-selected);box-shadow:0 0 0 1px var(--review-selected)}
+.review-card-heading{width:100%;display:flex;align-items:center;gap:8px;text-align:left;border:0;background:transparent;color:var(--text);padding:14px 16px 7px;border-radius:12px 12px 0 0;cursor:pointer;flex-wrap:wrap}
+.review-card-heading strong{font-size:12px}
+.review-note-number{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+.review-kind,.review-scope{font-size:10px;padding:3px 6px;border-radius:4px;background:var(--soft);color:var(--muted)}
+.review-kind.error{color:var(--review-delete);background:color-mix(in srgb,var(--review-delete) 8%,var(--panel))}
+.review-locate-label{margin-left:auto;font-size:10px;color:var(--muted)}
+.review-card-body{padding:4px 16px 14px;cursor:pointer}
+.review-sentence{display:grid;grid-template-columns:40px minmax(0,1fr);gap:8px;margin:7px 0;font-size:14px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
+.review-sentence small{color:var(--muted);font-size:11px;padding-top:3px}
+.review-sentence em{font-style:normal;color:var(--muted);font-size:12px}
+.review-explanation,.review-location-note,.review-issue-summary p{font-size:12px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--muted);margin:9px 0 0}
+.review-location-note{border-top:1px dashed var(--border);padding-top:7px}
+.review-question{border-bottom:1px solid var(--border);flex:none;min-height:0}
+.review-question-toggle{width:100%;padding:10px 20px;display:flex;align-items:center;gap:8px;border:0;background:var(--soft);color:var(--text);font-size:12px;text-align:left}
+.review-question-toggle>span{margin-left:auto;color:var(--muted);font-size:11px}
+.review-question-image{max-height:160px;overflow:auto;padding:14px}
+.review-question-image img{width:100%;height:auto}
+.review-question-image p{font-size:12px;color:var(--muted)}
+.review-related{display:flex;gap:7px;align-items:center;padding:5px 20px 10px;flex-wrap:wrap;flex:none}
+.review-related>span{font-size:11px;color:var(--muted)}
+.review-related button{font-size:11px;min-width:28px;min-height:28px;border-radius:6px;background:var(--panel);border:1px solid var(--border);color:var(--text)}
+.review-related button[aria-pressed=true]{background:var(--review-highlight);border-color:var(--review-selected)}
+.review-empty{padding:30px 15px;text-align:center;color:var(--muted);font-size:13px;line-height:1.8}
+.review-warning{font-size:12px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;background:var(--yellow-soft);line-height:1.7}
+.review-warning p{margin:0 0 6px}
+.review-warning summary{cursor:pointer}
+.review-warning pre{max-height:250px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.review-legacy{overflow:auto;padding:24px;flex:1;min-height:0;font-size:13px;line-height:1.8}
+.review-legacy>h2{font-size:16px}
+.review-legacy>p{color:var(--muted)}
+html[data-theme=dark] .annotated-review{--review-delete:#ff9e99;--review-insert:#71d7a7;--review-highlight:#514626;--review-selected:#ad9042}
+@media(prefers-color-scheme:dark){html[data-theme=system] .annotated-review{--review-delete:#ff9e99;--review-insert:#71d7a7;--review-highlight:#514626;--review-selected:#ad9042}}
+@media(max-width:1000px){.annotated-review{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}.review-source-scroll{padding:8px 16px 20px}.review-results-scroll{padding:14px 12px 20px}.review-pane-heading{padding:10px 14px}.review-source-text{font-size:14px}.review-scores>div{grid-template-columns:1fr}.review-sentence{font-size:13px}}
+@media(max-width:760px){.annotated-review{grid-template-columns:1fr;grid-template-rows:minmax(130px,0.8fr) minmax(160px,1.2fr)}.review-source-pane{border-right:0;border-bottom:1px solid var(--border)}.review-source-meta{padding:7px 14px}.review-source-footer{display:none}.review-pane-heading{min-height:40px;padding:7px 14px}.review-source-text{line-height:1.9}.review-question-image{max-height:90px}.review-scores>div{grid-template-columns:1fr 1fr}}
+
+.essay-chat .conversation-scroll[hidden],.essay-chat .conversation-footer[hidden]{display:none}
+
+@media(max-width:1120px){.workspace:has(.annotated-review) .writer-head{height:auto;min-height:70px;flex-wrap:wrap;gap:10px}.workspace:has(.annotated-review) .writer-actions{flex-wrap:wrap}.workspace:has(.annotated-review) .writer-title input{min-width:0;max-width:100%}}
+html[data-theme=dark] .review-source-text .ink-blue{color:#8fb6ff}
+html[data-theme=dark] .review-source-text .ink-green{color:#7bcf9a}
+html[data-theme=dark] .review-source-text .ink-red{color:#ff9e99}
+@media(prefers-color-scheme:dark){html[data-theme=system] .review-source-text .ink-blue{color:#8fb6ff}html[data-theme=system] .review-source-text .ink-green{color:#7bcf9a}html[data-theme=system] .review-source-text .ink-red{color:#ff9e99}}
+/* Deletions keep their semantic color even when the student's ink is colored. */
+html .annotated-review .review-source-text .source-deletion{color:var(--review-delete)}

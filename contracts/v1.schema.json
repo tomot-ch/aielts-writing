@@ -1,0 +1,1548 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ielts-writing/v1",
+  "$defs": {
+    "InkColor": {
+      "type": "string",
+      "enum": [
+        "black",
+        "blue",
+        "green",
+        "red"
+      ]
+    },
+    "TextRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "color"
+      ],
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "color": {
+          "$ref": "#/$defs/InkColor"
+        }
+      }
+    },
+    "Question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "title",
+        "taskType",
+        "imageCount",
+        "source",
+        "imageFile",
+        "sha256",
+        "importedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "x-rust-type": "u32"
+        },
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "taskType": {
+          "type": "string",
+          "enum": [
+            "task1",
+            "task2"
+          ]
+        },
+        "imageCount": {
+          "type": "integer",
+          "x-rust-type": "usize"
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "local",
+            "download"
+          ]
+        },
+        "imageFile": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string"
+        },
+        "importedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "VersionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "sessionId",
+        "kind",
+        "sourceVersionId",
+        "createdAt",
+        "wordCount",
+        "path",
+        "fixed"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "sessionId": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "original",
+            "revision"
+          ]
+        },
+        "sourceVersionId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "wordCount": {
+          "type": "integer",
+          "x-rust-type": "usize"
+        },
+        "path": {
+          "type": "string"
+        },
+        "fixed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "sessionId",
+        "title",
+        "questionId",
+        "taskType",
+        "status",
+        "originalVersionId",
+        "versions",
+        "analysisIds",
+        "createdAt",
+        "updatedAt",
+        "revision",
+        "timerEnabled",
+        "timerStartedAt",
+        "timerElapsedSeconds",
+        "workingVersionId"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "x-rust-type": "u32"
+        },
+        "sessionId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "questionId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "taskType": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "task1",
+            "task2"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "original_submitted",
+            "editing_original",
+            "revising"
+          ]
+        },
+        "originalVersionId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "versions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/VersionRef"
+          }
+        },
+        "analysisIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer",
+          "x-rust-type": "u64"
+        },
+        "timerEnabled": {
+          "type": "boolean"
+        },
+        "timerStartedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "timerElapsedSeconds": {
+          "type": "integer",
+          "x-rust-type": "u64"
+        },
+        "workingVersionId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "VersionDoc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "versionId",
+        "kind",
+        "sourceVersionId",
+        "runs"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "x-rust-type": "u32"
+        },
+        "versionId": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "original",
+            "revision"
+          ]
+        },
+        "sourceVersionId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "runs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TextRun"
+          }
+        }
+      }
+    },
+    "SessionSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "questionId",
+        "taskType",
+        "status",
+        "wordCount",
+        "updatedAt",
+        "folder"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "questionId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "taskType": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "task1",
+            "task2"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "original_submitted",
+            "editing_original",
+            "revising"
+          ]
+        },
+        "wordCount": {
+          "type": "integer",
+          "x-rust-type": "usize"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "folder": {
+          "type": "string"
+        }
+      }
+    },
+    "SessionView": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "session",
+        "activeRuns",
+        "saveRevision",
+        "versions",
+        "timerEnabled",
+        "remainingSeconds",
+        "workingVersionId"
+      ],
+      "properties": {
+        "session": {
+          "$ref": "#/$defs/SessionSummary"
+        },
+        "activeRuns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TextRun"
+          }
+        },
+        "saveRevision": {
+          "type": "integer",
+          "x-rust-type": "u64"
+        },
+        "versions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/VersionRef"
+          }
+        },
+        "timerEnabled": {
+          "type": "boolean"
+        },
+        "remainingSeconds": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "x-rust-type": "i64"
+        },
+        "workingVersionId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "SaveReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "revision",
+        "savedAt",
+        "wordCount"
+      ],
+      "properties": {
+        "revision": {
+          "type": "integer",
+          "x-rust-type": "u64"
+        },
+        "savedAt": {
+          "type": "string"
+        },
+        "wordCount": {
+          "type": "integer",
+          "x-rust-type": "usize"
+        }
+      }
+    },
+    "Index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "sessions"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "x-rust-type": "u32"
+        },
+        "sessions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SessionSummary"
+          }
+        }
+      }
+    },
+    "ImportResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "imported",
+        "skipped"
+      ],
+      "properties": {
+        "imported": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Question"
+          }
+        },
+        "skipped": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Skipped"
+          }
+        }
+      }
+    },
+    "ImportItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "taskType",
+        "title"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "taskType": {
+          "type": "string",
+          "enum": [
+            "task1",
+            "task2"
+          ]
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "Skipped": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "reason"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "Startup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "configured",
+        "root",
+        "recommendedRoot"
+      ],
+      "properties": {
+        "configured": {
+          "type": "boolean"
+        },
+        "root": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "recommendedRoot": {
+          "type": "string"
+        }
+      }
+    },
+    "AppError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message",
+        "retryable"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "retryable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ConfigDraft": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "baseUrl",
+        "apiKey",
+        "modelName",
+        "contextLimit"
+      ],
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "baseUrl": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string"
+        },
+        "modelName": {
+          "type": "string"
+        },
+        "contextLimit": {
+          "type": "integer",
+          "x-rust-type": "usize"
+        },
+        "apiProtocol": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "enum": [
+            "chat_completions",
+            "responses",
+            null
+          ]
+        },
+        "contextPolicy": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "enum": [
+            "auto",
+            "local",
+            "remote_required",
+            null
+          ]
+        }
+      }
+    },
+    "ConfigRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "name",
+        "baseUrl",
+        "modelName",
+        "contextLimit",
+        "secretRef",
+        "textCapable",
+        "visionCapable",
+        "testedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "x-rust-type": "u32"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "baseUrl": {
+          "type": "string"
+        },
+        "modelName": {
+          "type": "string"
+        },
+        "contextLimit": {
+          "type": "integer",
+          "x-rust-type": "usize"
+        },
+        "secretRef": {
+          "type": "string"
+        },
+        "textCapable": {
+          "type": "boolean"
+        },
+        "visionCapable": {
+          "type": "boolean"
+        },
+        "testedAt": {
+          "type": "string"
+        },
+        "apiProtocol": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "enum": [
+            "chat_completions",
+            "responses",
+            null
+          ]
+        },
+        "contextPolicy": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "enum": [
+            "auto",
+            "local",
+            "remote_required",
+            null
+          ]
+        },
+        "contextCapability": {
+          "$ref": "#/$defs/ContextCapability",
+          "type": [
+            "object",
+            "null"
+          ],
+          "default": null
+        }
+      }
+    },
+    "CapabilityResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ok",
+        "model",
+        "latencyMs",
+        "error"
+      ],
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        },
+        "model": {
+          "type": "string"
+        },
+        "latencyMs": {
+          "type": "integer",
+          "x-rust-type": "u64"
+        },
+        "error": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "PromptDraft": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "content"
+      ],
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "PromptRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "versionId",
+        "name",
+        "content",
+        "builtIn",
+        "createdAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "x-rust-type": "u32"
+        },
+        "id": {
+          "type": "string"
+        },
+        "versionId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "builtIn": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string"
+        }
+      }
+    },
+    "SelectedVersion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sessionId",
+        "versionId"
+      ],
+      "properties": {
+        "sessionId": {
+          "type": "string"
+        },
+        "versionId": {
+          "type": "string"
+        }
+      }
+    },
+    "AnalyzeInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "items",
+        "promptId",
+        "analysisConfigId",
+        "visionConfigId",
+        "recordIssues",
+        "many"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SelectedVersion"
+          }
+        },
+        "promptId": {
+          "type": "string"
+        },
+        "analysisConfigId": {
+          "type": "string"
+        },
+        "visionConfigId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "recordIssues": {
+          "type": "boolean"
+        },
+        "many": {
+          "type": "boolean"
+        }
+      }
+    },
+    "JobRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "JobState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "status",
+        "completedItems",
+        "totalItems",
+        "resultId",
+        "error"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "x-rust-type": "u32"
+        },
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "queued",
+            "running",
+            "completed",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "completedItems": {
+          "type": "integer",
+          "x-rust-type": "usize"
+        },
+        "totalItems": {
+          "type": "integer",
+          "x-rust-type": "usize"
+        },
+        "resultId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "error": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "ChatMessage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "analysisId",
+        "role",
+        "content",
+        "createdAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "x-rust-type": "u32"
+        },
+        "id": {
+          "type": "string"
+        },
+        "analysisId": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "user",
+            "assistant"
+          ]
+        },
+        "content": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "configId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "modelName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "promptVersionId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "clientTurnId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        }
+      }
+    },
+    "AnalysisRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "title",
+        "createdAt",
+        "sources",
+        "promptId",
+        "promptVersionId",
+        "promptContent",
+        "configId",
+        "configTestedAt",
+        "modelName",
+        "visionConfigId",
+        "visionTestedAt",
+        "visionModelName",
+        "questionHashes",
+        "many",
+        "recordIssues",
+        "markdown",
+        "messages"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "x-rust-type": "u32"
+        },
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SelectedVersion"
+          }
+        },
+        "promptId": {
+          "type": "string"
+        },
+        "promptVersionId": {
+          "type": "string"
+        },
+        "promptContent": {
+          "type": "string"
+        },
+        "configId": {
+          "type": "string"
+        },
+        "configTestedAt": {
+          "type": "string"
+        },
+        "modelName": {
+          "type": "string"
+        },
+        "visionConfigId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "visionTestedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "visionModelName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "questionHashes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "many": {
+          "type": "boolean"
+        },
+        "recordIssues": {
+          "type": "boolean"
+        },
+        "markdown": {
+          "type": "string"
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ChatMessage"
+          }
+        },
+        "openingMessage": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "contextState": {
+          "$ref": "#/$defs/ConversationContext",
+          "type": [
+            "object",
+            "null"
+          ],
+          "default": null
+        },
+        "revision": {
+          "type": "integer",
+          "default": 0
+        },
+        "lastTurnId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "review": {
+          "$ref": "#/$defs/AnnotatedReview",
+          "type": [
+            "object",
+            "null"
+          ],
+          "default": null
+        }
+      }
+    },
+    "IssueRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "sessionId",
+        "versionId",
+        "analysisId",
+        "text",
+        "updatedAt",
+        "removed"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "x-rust-type": "u32"
+        },
+        "id": {
+          "type": "string"
+        },
+        "sessionId": {
+          "type": "string"
+        },
+        "versionId": {
+          "type": "string"
+        },
+        "analysisId": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "removed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "AnalysisPreset": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "slot": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "x-rust-type": "usize"
+        },
+        "analysisConfigId": {
+          "type": "string"
+        },
+        "visionConfigId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "promptId": {
+          "type": "string"
+        },
+        "recordIssues": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string",
+          "default": "",
+          "maxLength": 60
+        }
+      },
+      "required": [
+        "slot",
+        "analysisConfigId",
+        "visionConfigId",
+        "promptId",
+        "recordIssues"
+      ]
+    },
+    "AiPreferences": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "x-rust-type": "u32"
+        },
+        "activeSlot": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "x-rust-type": "usize"
+        },
+        "presets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AnalysisPreset"
+          },
+          "maxItems": 5
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "activeSlot",
+        "presets"
+      ]
+    },
+    "ConversationJob": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "state": {
+          "$ref": "#/$defs/JobState"
+        },
+        "source": {
+          "$ref": "#/$defs/SelectedVersion"
+        },
+        "openingMessage": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "state",
+        "source",
+        "openingMessage"
+      ]
+    },
+    "ContextCapability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "testedAt",
+        "fingerprint",
+        "reason"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "supported",
+            "unsupported",
+            "unverified"
+          ]
+        },
+        "testedAt": {
+          "type": "string"
+        },
+        "fingerprint": {
+          "type": "string"
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        }
+      }
+    },
+    "ConversationContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "responseId",
+        "bindingFingerprint",
+        "historyDigest",
+        "epoch",
+        "sourceFile",
+        "sourceCharacters",
+        "logicalCharacters"
+      ],
+      "properties": {
+        "responseId": {
+          "type": "string"
+        },
+        "bindingFingerprint": {
+          "type": "string"
+        },
+        "historyDigest": {
+          "type": "string"
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "sourceFile": {
+          "type": "string"
+        },
+        "sourceCharacters": {
+          "type": "integer",
+          "x-rust-type": "usize"
+        },
+        "logicalCharacters": {
+          "type": "integer",
+          "x-rust-type": "usize"
+        }
+      }
+    },
+    "PendingChatTurn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clientTurnId",
+        "message",
+        "status"
+      ],
+      "properties": {
+        "clientTurnId": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "received",
+            "outcome_unknown"
+          ]
+        }
+      }
+    },
+    "ChatTurnReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clientTurnId",
+        "user",
+        "reply",
+        "revision",
+        "contextMode",
+        "notice"
+      ],
+      "properties": {
+        "clientTurnId": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/$defs/ChatMessage"
+        },
+        "reply": {
+          "$ref": "#/$defs/ChatMessage"
+        },
+        "revision": {
+          "type": "integer"
+        },
+        "contextMode": {
+          "type": "string",
+          "enum": [
+            "manual_history",
+            "remote_bootstrap",
+            "remote_continue"
+          ]
+        },
+        "notice": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        }
+      }
+    },
+    "ReviewSegment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "paragraph",
+        "start",
+        "end",
+        "text"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "paragraph": {
+          "type": "integer",
+          "x-rust-type": "usize"
+        },
+        "start": {
+          "type": "integer",
+          "x-rust-type": "usize"
+        },
+        "end": {
+          "type": "integer",
+          "x-rust-type": "usize"
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "ReviewScore": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "criterion",
+        "band",
+        "explanation"
+      ],
+      "properties": {
+        "criterion": {
+          "type": "string"
+        },
+        "band": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "explanation": {
+          "type": "string"
+        }
+      }
+    },
+    "ReviewAnnotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "segmentIds",
+        "scope",
+        "original",
+        "suggestion",
+        "issueType",
+        "kind",
+        "explanation",
+        "start",
+        "end",
+        "locationNote"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "segmentIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scope": {
+          "type": "string"
+        },
+        "original": {
+          "type": "string"
+        },
+        "suggestion": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "issueType": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "explanation": {
+          "type": "string"
+        },
+        "start": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "x-rust-type": "usize",
+          "default": null
+        },
+        "end": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "x-rust-type": "usize",
+          "default": null
+        },
+        "locationNote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        }
+      }
+    },
+    "AnnotatedReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "source",
+        "runs",
+        "segments",
+        "summary",
+        "scores",
+        "annotations",
+        "issueSummary",
+        "warnings",
+        "rawResponse"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "x-rust-type": "u32"
+        },
+        "source": {
+          "$ref": "#/$defs/SelectedVersion"
+        },
+        "runs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TextRun"
+          }
+        },
+        "segments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReviewSegment"
+          }
+        },
+        "summary": {
+          "type": "string"
+        },
+        "scores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReviewScore"
+          }
+        },
+        "annotations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReviewAnnotation"
+          }
+        },
+        "issueSummary": {
+          "type": "string"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rawResponse": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

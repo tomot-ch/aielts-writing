@@ -1,0 +1,17 @@
+node_modules/
+dist/
+target/
+src-tauri/target/
+.DS_Store
+*.app
+*.dmg
+
+tsconfig.tsbuildinfo
+
+release-assets/
+artifacts/
+src-tauri/gen/
+*.zip
+.env
+.env.*
+!.env.example
