@@ -67,3 +67,27 @@ cargo run -p writing-core --example smoke -- /tmp/ielts-writing-smoke
 ## v2 发行包
 
 Git 标签为 `v2`，应用版本为 `2.0.0`。当前发布 Apple Silicon 的优化构建，采用 ad hoc 临时签名，未经 Apple 公证。下载与安装条件见[安装说明](INSTALL.md)，资源清单见[下载目录](downloads/README.md)。
+
+## 完整题库版打包与验证
+
+完整版沿用 v2.0.0 程序，在独立应用副本的内置资源目录放入 156 张题目图片，再重新签名和打包。首次确认数据目录后，既有 `seed_questions` 流程自动入库；资源中的题名区分学术类与培训类。原来的轻量版继续提供少量示例题。
+
+从 v2 Release 将原轻量版应用 ZIP、学术类合集、培训类补充包、`question-catalog.json` 与 `SHA256SUMS.txt` 放在仓库的 `release-assets/`。macOS 上使用 Python 3.11+ 执行：
+
+```bash
+python3 scripts/package-full-macos.py \
+  --assets release-assets \
+  --output artifacts/full-package
+```
+
+输出目录必须不存在。脚本验证输入与每张图片的 SHA-256，仅修改输出目录内的应用副本，不安装或启动应用；生成 DMG、ZIP、校验清单和构建记录。重新签名会改变签名字节，脚本另外核对 Mach-O 指令区哈希，确认程序执行指令保持一致。
+
+使用实际生产数据层验证自动入库与保留旧数据：
+
+```bash
+cargo run -p writing-core --example full_questions_smoke --locked -- \
+  "artifacts/full-package/staging/爱雅思写作 aiELTS Writing.app/Contents/Resources/resources/questions" \
+  artifacts/full-package-check
+```
+
+测试目录必须不存在。该流程检查 156 张题目读取与 Task 分类、选题创建作文、重复入库、回收站删除记录，以及既有题库和作文快照保留。旧图与新整理图若字节内容不同，会按不同图片保留；不删除用户旧数据。真实模型与不同 macOS 版本另行验证。

@@ -4,14 +4,20 @@
 
 ## 应用安装包
 
+**推荐完整版：一个安装包包含应用和 156 道题。首次打开确认数据目录后自动入库，直接选题开始练习。**
+
 | 文件 | 用途 |
 | --- | --- |
-| [macOS Apple Silicon · DMG](https://github.com/tomot-ch/aielts-writing/releases/download/v2/aiELTS-Writing-v2.0.0-macos-arm64.dmg) | 推荐：打开后拖入“应用程序” |
-| [macOS Apple Silicon · ZIP](https://github.com/tomot-ch/aielts-writing/releases/download/v2/aiELTS-Writing-v2.0.0-macos-arm64.zip) | 解压后拖入“应用程序”，与 DMG 二选一 |
+| **[完整版 · DMG，约 86 MB](https://github.com/tomot-ch/aielts-writing/releases/download/v2/aiELTS-Writing-v2.0.0-macos-arm64-full.dmg)** | **应用＋156 题，自动入库，推荐下载** |
+| [完整版 · ZIP](https://github.com/tomot-ch/aielts-writing/releases/download/v2/aiELTS-Writing-v2.0.0-macos-arm64-full.zip) | 同一份完整应用，与完整版 DMG 二选一 |
+| [轻量版 · DMG](https://github.com/tomot-ch/aielts-writing/releases/download/v2/aiELTS-Writing-v2.0.0-macos-arm64.dmg) | 附少量示例题，可自行补充题库 |
+| [轻量版 · ZIP](https://github.com/tomot-ch/aielts-writing/releases/download/v2/aiELTS-Writing-v2.0.0-macos-arm64.zip) | 与轻量版 DMG 二选一 |
 
 安装包采用 ad hoc 临时签名，未经 Apple 公证。首次打开和使用条件见[安装说明](../INSTALL.md)。
 
 ## 题库
+
+完整版已经包含以下题目，无需再下载单独题包。轻量版用户或仅需要题目图片时，可按下列入口下载。
 
 本次包含 **156 题**：剑雅 4–19 学术类 128 题、培训类 28 题。这是本次整理的范围，不代表全部雅思题目。
 
@@ -42,6 +48,8 @@
 | [剑雅 19](https://github.com/tomot-ch/aielts-writing/releases/download/v2/ielts-writing-cambridge-19.zip) | 8 |
 
 ### 怎样导入
+
+完整版自动导入内置题目；以下步骤适用于单独下载题包或补充题目。
 
 1. 解压下载的 ZIP，找到 `images/` 文件夹。
 2. 打开应用“准备&其他 → 下载或自行上传题目 → 选择图片导入”。
