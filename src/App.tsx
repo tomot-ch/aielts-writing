@@ -2,7 +2,8 @@ import {useCallback,useEffect,useRef,useState} from 'react';
 import {BookOpen, ChevronDown, ChevronRight, Clock3, Download, FilePenLine, FolderOpen, LayoutPanelLeft, Maximize2, MessageSquareText, Minimize2, Moon, Plus, Settings2, Sun, Trash2, Upload, X} from 'lucide-react';
 import {open} from '@tauri-apps/plugin-dialog';import {getCurrentWindow} from '@tauri-apps/api/window';import {listen} from '@tauri-apps/api/event';import {openPath} from '@tauri-apps/plugin-opener';
 import {api,type InkColor,type Question,type SessionSummary,type SessionView,type Startup,type TextRun} from './api';
-import {insertColored,readRuns,renderRuns,wordCount} from './editor';
+import {bindColoredInput,readRuns,renderRuns} from './editor';
+import {wordCount} from './wordCount';
 import {ModelSettings,AnalysisWorkspace,EssayWorkspace,IssueRegister,type EssayWorkspaceHandle} from './V2';
 import {SessionSave} from './sessionSave';
 import {emptyReviewState,prepareReviewSource,type EssayReviewState,type WriterMode} from './reviewWorkflow';
@@ -33,6 +34,7 @@ export default function App(){
  const [importItems,setImportItems]=useState<{path:string;taskType:'task1'|'task2';title:string}[]>([]);
  const [tick,setTick]=useState(0),[loadSeq,setLoadSeq]=useState(0),[exportSelection,setExportSelection]=useState<Record<string,boolean>>({});
  const editor=useRef<HTMLDivElement>(null),runsRef=useRef<TextRun[]>([]),debounce=useRef<number|undefined>(undefined),viewRef=useRef<SessionView|null>(null);
+ const selectedInk=useRef<InkColor>('black');
  const saverRef=useRef<SessionSave|null>(null);
  if(!saverRef.current)saverRef.current=new SessionSave((sessionId,expectedRevision,runs)=>api.call('save_session',{sessionId,expectedRevision,runs}),setSaveState,e=>setNotice(`保存失败：${errorText(e)}`));
  const saver=saverRef.current;
@@ -83,6 +85,19 @@ export default function App(){
  };
  const scheduleSave=()=>{window.clearTimeout(debounce.current);debounce.current=window.setTimeout(()=>void flushSave(),350)};
  const onEdit=()=>{if(!editor.current)return;const next=readRuns(editor.current);runsRef.current=next;setRuns(next);saver.update(next);if(pendingQuickRef.current&&next.some(x=>x.text.length>0))void ensureQuickCreated().then(()=>void flushSave()).catch(e=>{setSaveState('保存失败');setNotice(`创建作文失败：${errorText(e)}`)});else scheduleSave()};
+ const editHandler=useRef(onEdit);
+ editHandler.current=onEdit;
+ const chooseInk=(color:InkColor)=>{selectedInk.current=color;setInk(color)};
+ const attachEditor=useCallback((node:HTMLDivElement|null)=>{
+  editor.current=node;
+  if(!node)return;
+  const unbind=bindColoredInput(node,{
+   color:()=>viewRef.current?.session.status==='revising'?selectedInk.current:'black',
+   canEdit:()=>!transitionRef.current&&!submissionPendingRef.current&&node.isContentEditable,
+   onChange:()=>editHandler.current(),
+  });
+  return ()=>{unbind();if(editor.current===node)editor.current=null};
+ },[]);
  const leaveExamMode=async()=>{if(!examMode)return;try{if(api.native)await getCurrentWindow().setFullscreen(false);else if(document.fullscreenElement)await document.exitFullscreen()}catch(e){setNotice(errorText(e))}setExamMode(false)};
  const toggleExamMode=async()=>{if(examMode){await leaveExamMode();return}try{if(api.native)await getCurrentWindow().setFullscreen(true);else if(document.fullscreenEnabled)await document.documentElement.requestFullscreen();setExamMode(true)}catch(e){setNotice(`无法进入全屏：${errorText(e)}`)}};
  const loadSession=async(id:string,preserveWorkspace=false)=>{
@@ -163,8 +178,6 @@ export default function App(){
  const openTrash=async()=>{if(startup?.root&&api.native)try{await openPath(`${startup.root}/回收站`)}catch(e){setNotice(errorText(e))}};
  const pickRoot=async()=>{if(!api.native)return;const p=await open({directory:true});if(typeof p==='string')setRootChoice(p)};
  const toggleTimer=async()=>{if(!view||transitionRef.current)return;try{const v=await api.call('set_timer',{sessionId:view.session.id,enabled:!view.timerEnabled});viewRef.current=v;setView(v);setTick(0)}catch(e){setNotice(errorText(e))}};
- const onBeforeInput=(e:React.FormEvent<HTMLDivElement>)=>{const event=e.nativeEvent as InputEvent;if(transitionRef.current||submissionPendingRef.current||view?.session.status==='original_submitted'){event.preventDefault();return}if(event.isComposing)return;if(event.inputType==='insertText'&&event.data){event.preventDefault();insertColored(e.currentTarget,event.data,ink);onEdit()}if(event.inputType==='insertParagraph'){event.preventDefault();insertColored(e.currentTarget,'\n',ink);onEdit()}};
- const onPaste=(e:React.ClipboardEvent<HTMLDivElement>)=>{e.preventDefault();if(transitionRef.current||submissionPendingRef.current||view?.session.status==='original_submitted')return;insertColored(e.currentTarget,e.clipboardData.getData('text/plain'),ink);onEdit()};
  const startDrag=useCallback((side:'left'|'right',event:React.PointerEvent)=>{event.preventDefault();const container=(event.currentTarget.parentElement as HTMLElement);const rect=container.getBoundingClientRect();const move=(e:PointerEvent)=>{if(side==='left')setLeftWidth(Math.min(65,Math.max(22,(e.clientX-rect.left)/rect.width*100)));else setChatWidth(Math.min(38,Math.max(19,(rect.right-e.clientX)/rect.width*100)))};const stop=()=>{window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',stop)};window.addEventListener('pointermove',move);window.addEventListener('pointerup',stop)},[]);
  const remain=view?.timerEnabled?Math.max(-9999,(view.remainingSeconds??0)-tick):null;const timeText=remain===null?'计时关闭':remain<0?`已超时 ${Math.floor(-remain/60)}:${String(-remain%60).padStart(2,'0')}`:`${Math.floor(remain/60)}:${String(remain%60).padStart(2,'0')}`;
  return <div className={`app-shell ${examMode&&page==='editor'?'exam-mode':''}`}>
@@ -194,7 +207,7 @@ export default function App(){
     <div className="task-guide">{writerMode==='review'?'点击原文标记或批注卡片可联动定位。点击“修改”进入文章修改与 AI 聊天。':writerMode==='revise'?'文章修改会自动保存。点击“批阅”查看已有批注；需要新的批阅时，点击“重新批阅当前稿”。':`${view.session.taskType==='task1'?'Task 1 · 建议用时 20 分钟，至少 150 词。':view.session.taskType==='task2'?'Task 2 · 建议用时 40 分钟，至少 250 词。':'自由写作 · 不设题目与时间限制。'} 写完后点击“批阅”，完成批阅后即可修改。`}</div>
     <div className="panes">
      {(showQuestion||examMode)&&view.session.questionId&&<><section className="question-pane" style={{width:`${leftWidth}%`}}><div className="pane-head"><strong>题目</strong><button className="icon-button" title="隐藏题目" onClick={()=>setShowQuestion(false)}><X size={16}/></button></div><div className="pane-scroll">{questionImg&&<img src={questionImg} alt="写作题目原图"/>}</div></section><div className="splitter question-splitter" role="separator" aria-label="调整题目栏宽度" onPointerDown={e=>startDrag('left',e)}><span/></div></>}
-     {(showEssay||examMode||writerMode==='write')&&<section className="essay-pane"><div className="pane-head"><strong>{writerMode==='revise'?'修改文章':'文章'}</strong><span>{saveState}</span></div>{view.session.status==='revising'&&<div className="ink-toolbar"><span>接下来输入的颜色</span>{(['black','blue','green','red'] as InkColor[]).map(c=><button key={c} title={{black:'黑色',blue:'蓝色',green:'绿色',red:'红色'}[c]} aria-label={{black:'黑色',blue:'蓝色',green:'绿色',red:'红色'}[c]} aria-pressed={ink===c} className={`ink-choice ink-${c} ${ink===c?'selected':''}`} onMouseDown={e=>e.preventDefault()} onClick={()=>setInk(c)}><span/></button>)}</div>}<div className="editor-scroll"><div ref={editor} className="essay-editor" contentEditable={!transitioning&&!submissionPending&&view.session.status!=='original_submitted'} suppressContentEditableWarning spellCheck={false} autoCorrect="off" autoCapitalize="off" {...writingInputAttributes} onBeforeInput={onBeforeInput} onInput={onEdit} onPaste={onPaste} data-placeholder={view.session.status==='original_submitted'?'稿件已固定。点击“批阅”查看结果，或在批阅后点击“修改”。':'在这里开始写作…'} aria-label="作文输入区"/></div><div className="essay-status"><span>{view.session.status==='original_submitted'?'已固定稿件 · 只读':'输入中自动保存'}</span><span>Words: {wordCount(runs)}</span></div></section>}
+     {(showEssay||examMode||writerMode==='write')&&<section className="essay-pane"><div className="pane-head"><strong>{writerMode==='revise'?'修改文章':'文章'}</strong><span>{saveState}</span></div>{view.session.status==='revising'&&<div className="ink-toolbar"><span>接下来输入的颜色</span>{(['black','blue','green','red'] as InkColor[]).map(c=><button key={c} title={{black:'黑色',blue:'蓝色',green:'绿色',red:'红色'}[c]} aria-label={{black:'黑色',blue:'蓝色',green:'绿色',red:'红色'}[c]} aria-pressed={ink===c} className={`ink-choice ink-${c} ${ink===c?'selected':''}`} onMouseDown={e=>e.preventDefault()} onClick={()=>chooseInk(c)}><span/></button>)}</div>}<div className="editor-scroll"><div ref={attachEditor} className="essay-editor" contentEditable={!transitioning&&!submissionPending&&view.session.status!=='original_submitted'} suppressContentEditableWarning spellCheck={false} autoCorrect="off" autoCapitalize="off" {...writingInputAttributes} data-placeholder={view.session.status==='original_submitted'?'稿件已固定。点击“批阅”查看结果，或在批阅后点击“修改”。':'在这里开始写作…'} aria-label="作文输入区"/></div><div className="essay-status"><span>{view.session.status==='original_submitted'?'已固定稿件 · 只读':'输入中自动保存'}</span><span>Words: {wordCount(runs)}</span></div></section>}
      {view.session.id!=='pending-quick'&&<><div className="splitter chat-splitter" role="separator" aria-label="调整 AI 栏宽度" onPointerDown={e=>startDrag('right',e)}><span/></div><section className={`chat-pane ${showChat?'':'chat-collapsed'}`} style={{width:`${chatWidth}%`}}><div className="pane-head"><strong>{writerMode==='review'?'批阅':'AI 聊天'}</strong>{writerMode==='revise'&&<button className="icon-button" aria-label="关闭 AI 聊天" onClick={()=>setShowChat(false)}><X size={16}/></button>}</div><EssayWorkspace key={view.session.id} ref={analysis} session={view} mode={writerMode} onState={setReviewState} onModeChange={setWriterMode} notice={setNotice} onConfigure={()=>void navigate('ai')}/></section></>}
     </div>
     <div className="writer-footer">
